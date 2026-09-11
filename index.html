@@ -1,0 +1,432 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="w
+idth=device-width, initial-scale=1.0">
+  <title>Ecommerce Zapatillas - Leidy Cañón</title>
+
+  <style>
+    /* =========================
+       ESTILOS GENERALES
+    ========================= */
+
+    body {
+      font-family: system-ui;
+      background-color: #f2f4f7;
+      color: #111;
+      padding: 20px;
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 {
+      color: #000;
+      margin-bottom: 30px;
+    }
+
+    /* =========================
+       PRODUCTOS
+    ========================= */
+
+    #productos {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .producto {
+      border: 1px solid #1e3a8a;
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px;
+      display: inline-block;
+      width: 220px;
+      vertical-align: top;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .producto h3 {
+      color: #000;
+    }
+
+    .producto p {
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+
+    /* =========================
+       BOTONES
+    ========================= */
+
+    .producto button,
+    .carrito button {
+      background-color: #1e3a8a;
+      border: none;
+      color: white;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .producto button:hover,
+    .carrito button:hover {
+      background-color: #000;
+    }
+
+    /* =========================
+       CARRITO
+    ========================= */
+
+    .carrito {
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 8px;
+      text-align: left;
+      display: block;
+      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .carrito h2 {
+      color: #000;
+    }
+
+    .carrito ul {
+      padding-left: 20px;
+    }
+
+    .carrito li {
+      margin-bottom: 8px;
+    }
+
+    .carrito button.vaciar {
+      background-color: #000;
+      margin-top: 10px;
+    }
+
+    .carrito button.vaciar:hover {
+      background-color: #1e3a8a;
+    }
+
+    /* Botón finalizar compra */
+
+    .btn-finalizar {
+      background-color: #1e3a8a !important;
+      margin-left: 5px;
+    }
+
+    .btn-finalizar:hover {
+      background-color: #000 !important;
+    }
+
+    #total {
+      color: #1e3a8a;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       TÍTULO
+  ========================= -->
+
+  <h1>👟 Ecommerce Zapatillas - Leidy Cañón</h1>
+
+  <!-- =========================
+       PRODUCTOS
+  ========================= -->
+
+  <div id="productos"></div>
+
+  <!-- =========================
+       CARRITO DE COMPRAS
+  ========================= -->
+
+  <div class="carrito">
+
+    <h2>🧾 Carrito de Compras (0)</h2>
+
+    <ul id="lista-carrito"></ul>
+
+    <p>
+      <strong>
+        Total: $<span id="total">0.00</span>
+      </strong>
+    </p>
+
+    <button class="vaciar" onclick="vaciarCarrito()">
+      🧼 Vaciar Carrito
+    </button>
+
+  </div>
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+    /* =========================
+       LISTA DE PRODUCTOS
+    ========================= */
+
+    const productos = [
+      {
+        id: 1,
+        nombre: "Tenis Mágicos",
+        precio: 25.00,
+        imagen: "https://www.underarmour.com.co/cdn/shop/files/3022954-103_022_1.jpg?v=1785792520&width=1200"
+      },
+      {
+        id: 2,
+        nombre: "Deporte Extremo",
+        precio: 18.00,
+        imagen: "https://www.underarmour.com.co/cdn/shop/files/3024897-601_RE9_1.jpg?v=1785793154&width=1200"
+      },
+      {
+        id: 3,
+        nombre: "Comodidad al cien",
+        precio: 30.00,
+        imagen: "https://www.underarmour.com.co/cdn/shop/files/3025516-005_N11_1.jpg?v=1785793545&width=1200"
+      },
+      {
+        id: 4,
+        nombre: "Vida tranquila",
+        precio: 18.00,
+        imagen: "https://sportzone.co/cdn/shop/files/FQ1831-300-2.jpg?v=1789044954&width=493"
+      },
+      {
+        id: 5,
+        nombre: "Motiva el ejercicio",
+        precio: 22.00,
+        imagen: "https://sportzone.co/cdn/shop/files/DV0740-003-2.jpg?v=1788792917&width=493"
+      }
+    ];
+
+
+    /* =========================
+       CARRITO
+    ========================= */
+
+    const carrito = [];
+
+    const contenedorProductos =
+      document.getElementById("productos");
+
+    const listaCarrito =
+      document.getElementById("lista-carrito");
+
+    const totalCarrito =
+      document.getElementById("total");
+
+
+    /* =========================
+       MOSTRAR PRODUCTOS
+    ========================= */
+
+    function mostrarProductos() {
+
+      productos.forEach(prod => {
+
+        const div = document.createElement("div");
+
+        div.className = "producto";
+
+        div.innerHTML = `
+          <img 
+            src="${prod.imagen}" 
+            alt="${prod.nombre}"
+          >
+
+          <h3>${prod.nombre}</h3>
+
+          <p>
+            Precio: $${prod.precio.toFixed(2)}
+          </p>
+
+          <button onclick="agregarAlCarrito(${prod.id})">
+            🛒 Agregar al carrito
+          </button>
+        `;
+
+        contenedorProductos.appendChild(div);
+
+      });
+
+    }
+
+
+    /* =========================
+       AGREGAR AL CARRITO
+    ========================= */
+
+    function agregarAlCarrito(id) {
+
+      const productoExistente =
+        carrito.find(p => p.id === id);
+
+      if (productoExistente) {
+
+        productoExistente.cantidad++;
+
+      } else {
+
+        const producto =
+          productos.find(p => p.id === id);
+
+        carrito.push({
+          ...producto,
+          cantidad: 1
+        });
+
+      }
+
+      actualizarCarrito();
+
+    }
+
+
+    /* =========================
+       ACTUALIZAR CARRITO
+    ========================= */
+
+    function actualizarCarrito() {
+
+      listaCarrito.innerHTML = "";
+
+      let total = 0;
+      let totalItems = 0;
+
+      carrito.forEach(item => {
+
+        const li = document.createElement("li");
+
+        li.textContent =
+          `${item.nombre} x${item.cantidad} - $${(
+            item.precio * item.cantidad
+          ).toFixed(2)}`;
+
+        listaCarrito.appendChild(li);
+
+        total += item.precio * item.cantidad;
+
+        totalItems += item.cantidad;
+
+      });
+
+      totalCarrito.textContent =
+        total.toFixed(2);
+
+      actualizarTituloCarrito(totalItems);
+
+    }
+
+
+    /* =========================
+       ACTUALIZAR TÍTULO CARRITO
+    ========================= */
+
+    function actualizarTituloCarrito(cantidad) {
+
+      const titulo =
+        document.querySelector(".carrito h2");
+
+      titulo.textContent =
+        `🧾 Carrito de Compras (${cantidad})`;
+
+    }
+
+
+    /* =========================
+       VACIAR CARRITO
+    ========================= */
+
+    function vaciarCarrito() {
+
+      if (
+        confirm(
+          "¿Estás seguro de que quieres vaciar el carrito?"
+        )
+      ) {
+
+        carrito.length = 0;
+
+        actualizarCarrito();
+
+      }
+
+    }
+
+
+    /* =========================
+       FINALIZAR COMPRA
+    ========================= */
+
+    function finalizarCompra() {
+
+      if (carrito.length === 0) {
+
+        alert(
+          "El carrito está vacío. Agrega productos antes de finalizar la compra."
+        );
+
+        return;
+      }
+
+      alert(
+        "🎉 ¡Gracias por tu compra! En breve recibirás un correo de confirmación."
+      );
+
+      carrito.length = 0;
+
+      actualizarCarrito();
+
+    }
+
+
+    /* =========================
+       BOTÓN FINALIZAR COMPRA
+    ========================= */
+
+    const botonFinalizar =
+      document.createElement("button");
+
+    botonFinalizar.textContent =
+      "✅ Finalizar Compra";
+
+    botonFinalizar.className =
+      "btn-finalizar";
+
+    botonFinalizar.onclick =
+      finalizarCompra;
+
+    document
+      .querySelector(".carrito")
+      .appendChild(botonFinalizar);
+
+
+    /* =========================
+       INICIAR TIENDA
+    ========================= */
+
+    mostrarProductos();
+
+  </script>
+
+</body>
+</html>
+```
